@@ -70,8 +70,8 @@ Kunjungi [Forum Algorand Developer](https://developer.algorand.org/) untuk lebih
 #### Menyediakan direktori data Anda sendiri
 
 Anda dapat menjalankan node dari direktori lain selain `~ / .algorand` dan bergabung dengan jaringan
-selain mainnet. Cukup buat direktori baru dan salin ke dalamnya
-File `genesis.json` untuk jaringan. Sebagai contoh:
+selain mainnet. Cukup buat direktori baru dan salin ke dalam
+File `genesis.json`. Sebagai contoh:
 ```bash
 mkdir ~/testnet_data
 cp installer/genesis/testnet/genesis.json ~/testnet_data/genesis.json
