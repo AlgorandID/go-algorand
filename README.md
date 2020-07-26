@@ -14,7 +14,7 @@ tentang menggunakan dan menginstal platform algorand.
 ## Refferensi untuk Memulai ##
 
 Pengembangan dilakukan menggunakan [Bahasa Program Golang](https://golang.org/).
-Versi go ditentukan dalam file [go.mod] (go.mod) proyek. Jika Anda memerlukan bantuan, silakan kunjungi
+Versi go ditentukan dalam file [go.mod](https://github.com/algorand/go-algorand/blob/master/go.mod). Jika Anda memerlukan bantuan, silakan kunjungi
 [situs web dokumentasi resmi Go](https://golang.org/doc/).
 
 Kami saat ini berusaha agar bisa di kembangkan di Debian dengan Ubuntu 18.04
