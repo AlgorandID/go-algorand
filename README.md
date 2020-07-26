@@ -2,43 +2,37 @@
 
 go-algorand
 ====================
-Algorand's official implementation in Go.
+Implementasi resmi Algorand Go
 
-Algorand is a permissionless, pure proof-of-stake blockchain that delivers
-decentralization, scalability, security, and transaction finality.
+[Algorand](https://algorand.com) adalah blockchain murni tanpa izin, murni yang memberikan
+desentralisasi, skalabilitas, keamanan, dan finalitas transaksi.
 
-## Getting Started ##
+## Pengenalan ##
 
-Our [developer website][developer site url] has the most up to date information
-about using and installing the algorand platform.
+[Situs web pengembang](https://developer.algorand.org/) Algorand memiliki informasi terbaru
+tentang menggunakan dan menginstal platform algorand.
+## Refferensi untuk Memulai ##
 
-## Building from source ##
+Pengembangan dilakukan menggunakan [Bahasa Program Golang](https://golang.org/).
+Versi go ditentukan dalam file [go.mod] (go.mod) proyek. Jika Anda memerlukan bantuan, silakan kunjungi
+[situs web dokumentasi resmi Go](https://golang.org/doc/).
 
-Development is done using the [Go Programming Language](https://golang.org/).
-The version of go is specified in the project's [go.mod](go.mod) file. This document assumes that you have a functioning
-environment setup. If you need assistance setting up an environment please visit
-the [official Go documentation website](https://golang.org/doc/).
+Kami saat ini berusaha agar bisa di kembangkan di Debian dengan Ubuntu 18.04
+saat ini Tim Teknik Algorand menggunakan Linux dan OSX.
 
-### Linux / OSX ###
-
-We currently strive to support Debian based distributions with Ubuntu 18.04
-being our official release target. Our core engineering team uses Linux and OSX,
-so both environments are well supported for development.
-
-OSX only: [Homebrew (brew)](https://brew.sh) must be installed before
-continuing. [Here](https://docs.brew.sh/Installation) are the installation
-requirements.
-
-Initial environment setup:
+sebelum melanjutkan silahkan [install (brew)](https://brew.sh). [Baca persyaratan instalasi
+ disini](https://docs.brew.sh/Instalation)
+ 
+Pengaturan Awal:
 ```bash
 git clone https://github.com/algorand/go-algorand
 cd go-algorand
 ./scripts/configure_dev.sh
 ```
 
-At this point you are ready to build go-algorand. We use `make` and have a
-number of targets to automate common tasks.
 
+Pada titik ini Anda siap membangun go-algorand. Kami menggunakan `make` dan sudah memiliki 
+beberapa target untuk mengotomatisasi tugas-tugas umum.
 #### build
 ```bash
 make install
@@ -65,123 +59,114 @@ or alternatively
 make sanity
 ```
 
-### Running a node
+### menjalankan node
 
-Once the software is built you'll find binaries in `${GOPATH}/bin`, and a data
-directory will be initialized at `~/.algorand`. Start your node with
-`${GOPATH}/bin/goal node start -d ~/.algorand`, use `${GOPATH}/bin/carpenter -d
-~/.algorand` to see activity. Refer to the [developer website][developer site
-url] for how to use the different tools.
+Setelah perangkat lunak di siapkan, Anda akan menemukan binari di `$ {GOPATH} / bin`, dan sebuah data
+direktori akan diinisialisasi di `~ / .algorand`. Mulai node dengan
+`${GOPATH}/bin/goal node start -d ~/.algorand`, lalu gunakan` $ {GOPATH} / bin / carpenter -d
+~ / .algorand` untuk melihat aktivitas. 
+Kunjungi [Forum Algorand Developer](https://developer.algorand.org/) untuk lebih lengkap nya
 
-#### Providing your own data directory
-You can run a node out of other directories than `~/.algorand` and join networks
-other than mainnet. Just make a new directory and copy into it the
-`genesis.json` file for the network. For example:
+#### Menyediakan direktori data Anda sendiri
+
+Anda dapat menjalankan node dari direktori lain selain `~ / .algorand` dan bergabung dengan jaringan
+selain mainnet. Cukup buat direktori baru dan salin ke dalamnya
+File `genesis.json` untuk jaringan. Sebagai contoh:
 ```bash
 mkdir ~/testnet_data
 cp installer/genesis/testnet/genesis.json ~/testnet_data/genesis.json
 ${GOPATH}/bin/goal node start -d ~/testnet_data
 ```
-Genesis files for mainnet, testnet, and betanet can be found in
-`installer/genesis/`.
 
-## Contributing (Code, Documentation, Bugs, Etc) ##
+File Genesis untuk mainnet, testnet, dan betanet dapat ditemukan di
+`installer / genesis /`.
 
-Please refer to our [CONTRIBUTING](CONTRIBUTING.md) document.
+## Kontribusi Kode, Dokumentasi, Bug, Dll) ##
+
+Silahkan kunjungi [CONTRIBUTING](CONTRIBUTING.md) document.
 
 
-## Project Layout ##
+## Layout proyek ##
+`go-algorand` dibagi menjadi berbagai sub paket.
 
-`go-algorand` is split into various subpackages.
+Paket-paket berikut memberikan fungsionalitas inti ke `algod` dan` kmd`
+daemon, serta alat dan perintah lainnya:
 
-The following packages provide core functionality to the `algod` and `kmd`
-daemons, as well as other tools and commands:
+  - `crypto` berisi konstruksi kriptografi yang kami gunakan untuk hashing,
+    tanda tangan, dan VRF. Ada juga beberapa perincian spesifik Algorand di sini
+    tentang kunci pengeluaran, kunci protokol, kunci masuk sekali pakai, dan bagaimana mereka
+    saling berhubungan
+  - `config` menyimpan parameter konfigurasi. Ini termasuk parameter yang digunakan
+    secara lokal oleh node serta parameter yang harus disepakati oleh
+    protokol.
+  - `data` mendefinisikan berbagai jenis yang digunakan di seluruh basis kode.
+     - `basics` memiliki tipe dasar seperti MicroAlgos, data akun, dan
+       alamat.
+     - `akun` mendefinisikan akun, termasuk akun" root "(yang dapat
+       menghabiskan uang) dan akun "partisipasi" (yang dapat berpartisipasi dalam satu
+       protokol).
+     - `transaksi` mendefinisikan transaksi yang terdapat di ekosistem Algorand.
+     Ini termasuk pembayaran standar dan juga
+       transaksi pendaftaran pada  key registration .
+     - `pembukuan` mendefinisikan blok, yang merupakan kumpulan transaksi
+       secara atomik yang berjalan di atas Algorand.
+     - `pool` mengimplementasikan kumpulan transaksiyang dilihat oleh node sebelum diusulkan dalam 
+       blok.
+     - `committee` mengimplementasikan kredensial yang mengotentikasi 
+       keanggotaan akun yang berpartisipasi dalam protokol.
+  - `ledger` ([README] (ledger / README.md)) berisi status Sistem Ledger Algorand
+    , yang menampung urutan blok. Buku Besar yang mencatat semua perubahan yang terjadi di setiap block.
+  - `protokol` menyatakan konstanta yang digunakan untuk mengidentifikasi versi protokol, tag untuk
+    routing pesan jaringan, dan awalan untuk pemisahan 
+    input kriptografi. Ini juga mengimplementasikan encoder kanonik.
+  - `network` berisi kode untuk berpartisipasi dalam jaringan mesh berdasarkan
+    soket web.
+     - `rpcs` berisi HTTP RPC yang digunakan oleh proses` algod` untuk melakukan kueri
+       lain.
+  - `Agreement`[README](https://github.com/AlgorandID/go-algorand/blob/master/agreement/README.md/) berisi layanan perjanjian,
+    yang mengimplementasikan protokol Perjanjian Bizantium Algorand. Protokol ini
+    memungkinkan akun yang berpartisipasi untuk dengan cepat mengonfirmasi blok di garpu-aman
+    cara, dengan ketentuan bahwa jumlah akun yang cukup menjalankan eksekusi dengan benar
+    protokol.
+  - `node` mengintegrasikan komponen di atas dan menangani inisialisasi dan
+    mematikan. Ini memberikan pertanyaan ke dalam komponen-komponen ini.
 
-  - `crypto` contains the cryptographic constructions we're using for hashing,
-    signatures, and VRFs. There are also some Algorand-specific details here
-    about spending keys, protocols keys, one-time-use signing keys, and how they
-    relate to each other.
-  - `config` holds configuration parameters.  These include parameters used
-    locally by the node as well as parameters which must be agreed upon by the
-    protocol.
-  - `data` defines various types used throughout the codebase.
-     - `basics` holds basic types such as MicroAlgos, account data, and
-       addresses.
-     - `account` defines accounts, including "root" accounts (which can
-       spend money) and "participation" accounts (which can participate in
-       the agreement protocol).
-     - `transactions` defines transactions that accounts can issue against
-       the Algorand state.  These include standard payments and also
-       participation key registration transactions.
-     - `bookkeeping` defines blocks, which are batches of transactions
-       atomically committed to Algorand.
-     - `pools` implements the transaction pool.  The transaction pool holds
-       transactions seen by a node in memory before they are proposed in a
-       block.
-     - `committee` implements the credentials that authenticate a
-       participating account's membership in the agreement protocol.
-  - `ledger` ([README](ledger/README.md)) contains the Algorand Ledger state
-    machine, which holds the sequence of blocks.  The Ledger executes the state
-    transitions that result from applying these blocks.  It answers queries on
-    blocks (e.g., what transactions were in the last committed block?) and on
-    accounts (e.g., what is my balance?).
-  - `protocol` declares constants used to identify protocol versions, tags for
-    routing network messages, and prefixes for domain separation of
-    cryptographic inputs.  It also implements the canonical encoder.
-  - `network` contains the code for participating in a mesh network based on
-    websockets. Maintains connection to some number of peers, (optionally)
-    accepts connections from peers, sends point to point and broadcast messages,
-    and receives messages routing them to various handler code
-    (e.g. agreement/gossip/network.go registers three handlers).
-     - `rpcs` contains the HTTP RPCs used by `algod` processes to query one
-       another.
-  - `agreement` ([README](agreement/README.md)) contains the agreement service,
-    which implements Algorand's Byzantine Agreement protocol.  This protocol
-    allows participating accounts to quickly confirm blocks in a fork-safe
-    manner, provided that sufficient account stake is correctly executing the
-    protocol.
-  - `node` integrates the components above and handles initialization and
-    shutdown.  It provides queries into these components.
+`daemon` mendefinisikan dua daemon yang menyediakan layanan bagi klien Algorand:
 
-`daemon` defines the two daemons which provide Algorand clients with services:
+ - `daemon / algod` memegang daemon` algod`, yang mengimplementasikan partisipasi
+     node `algod` memungkinkan sebuah node untuk berpartisipasi dalam protokol,
+     mengirim dan konfirmasi informasi sebuah transaksi. Silahkan Lihat Tentang Buku Besar Algorand.
+      - `daemon / algod / api` [README](https://github.com/AlgorandID/go-algorand/blob/master/daemon/algod/api/README.md)
+      
+   - `daemon / kmd` [README](https://github.com/AlgorandID/go-algorand/blob/master/daemon/kmd/README.md) memegang daemon` kmd`. Ini
+     memungkinkan node untuk menandatangani transaksi. Karena `kmd` terpisah dari
+     `algod`,` kmd` memungkinkan pengguna untuk menandatangani transaksi pada komputer yang memiliki air-gapped computer. 
 
-  - `daemon/algod` holds the `algod` daemon, which implements a participating
-    node.  `algod` allows a node to participate in the agreement protocol,
-    submit and confirm transactions, and view the state of the Algorand Ledger.
-     - `daemon/algod/api` ([README](daemon/algod/api/README.md)) is the REST
-       interface used for interactions with algod.
-  - `daemon/kmd` ([README](daemon/kmd/README.md)) holds the `kmd` daemon.  This
-    daemon allows a node to sign transactions.  Because `kmd` is separate from
-    `algod`, `kmd` allows a user to sign transactions on an air-gapped computer.
+Paket-paket berikut memungkinkan pengembang untuk berinteraksi dengan sistem Algorand:
 
-The following packages allow developers to interface with the Algorand system:
+   - `cmd` memegang perintah utama yang mendefinisikan titik masuk ke dalam sistem.
+      - `cmd / catchupsrv` ([README](https://github.com/AlgorandID/go-algorand/blob/master/cmd/catchupsrv/README.md) adalah alat untuk
+        membantu memproses blok bersejarah pada simpul baru.
+   - `libgoal` mengekspor Interface Go yang berguna untuk pengembang klien Algorand.
+   - `debug` memegang perintah sekunder yang membantu pengembang selama debugging.
 
-  - `cmd` holds the primary commands defining entry points into the system.
-     - `cmd/catchupsrv` ([README](cmd/catchupsrv/README.md)) is a tool to
-       assist with processing historic blocks on a new node.
-  - `libgoal` exports a Go interface useful for developers of Algorand clients.
-  - `debug` holds secondary commands which assist developers during debugging.
+Paket-paket berikut berisi alat untuk membantu pengembang Algorand menggunakan jaringan
+milik mereka sendiri:
 
-The `auction` package implements the Algorand auctions.
+   - `nodecontrol`
+   - `tools`
+   - `docker`
+   - `commandandcontrol`[README](https://github.com/AlgorandID/go-algorand/blob/master/test/commandandcontrol/README.md) adalah alat untuk
+     mengotomatiskan jaringan instance algod.
+   - `komponen`https://github.com/AlgorandID/go-algorand/blob/master/test/commandandcontrol/README.md
+   - `netdeploy`
 
-The following packages contain tools to help Algorand developers deploy networks
-of their own:
+Sejumlah paket menyediakan utilitas untuk berbagai komponen:
+  - `logging` adalah pembungkus` logrus`.
+   - `util` berisi berbagai utilitas, termasuk code,sqlite wrapper,
+     kumpulan goroutine, antarmuka penghitung waktu, metrik node, dan banyak lagi.
 
-  - `nodecontrol`
-  - `tools`
-  - `docker`
-  - `commandandcontrol` ([README](test/commandandcontrol/README.md)) is a tool to
-    automate a network of algod instances.
-  - `components`
-  - `netdeploy`
-
-A number of packages provide utilities for the various components:
-
-  - `logging` is a wrapper around `logrus`.
-  - `util` contains a variety of utilities, including a codec, a sqlite wrapper,
-    a goroutine pool, a timer interface, node metrics, and more.
-
-`test` contains end-to-end tests for the above components.
+`test` berisi tes ujung ke ujung untuk komponen-komponen di atas.
 
 
 ## License
